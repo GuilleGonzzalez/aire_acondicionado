@@ -1,0 +1,2 @@
+rootProject.name='Aire'
+include ':app'

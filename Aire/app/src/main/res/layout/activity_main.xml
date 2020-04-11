@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/button_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            style="@style/button"
+            android:id="@+id/btn_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_on" />
+        <Button
+            style="@style/button"
+            android:id="@+id/btn_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_off" />
+        <TextView
+            style="@style/color"
+            android:id="@+id/txv_color"
+            android:layout_height="match_parent"
+            android:background="@color/off" />
+        <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:contentDescription="@string/thermometer"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_thermometer" />
+        <TextView
+            style="@style/temp"
+            android:id="@+id/txv_temp"
+            android:text="@string/temp_nan"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <RelativeLayout
+        style="@style/button_row"
+        android:id="@+id/lyo_fan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            style="@style/button"
+            android:id="@+id/btn_fan_auto"
+            android:layout_toStartOf="@id/btn_fan1"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_fan_auto" />
+        <Button
+            style="@style/button"
+            android:id="@+id/btn_fan1"
+            android:layout_toStartOf="@id/btn_fan2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_fan1" />
+        <Button
+            style="@style/button"
+            android:id="@+id/btn_fan2"
+            android:layout_toStartOf="@id/btn_fan3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_fan2" />
+        <Button
+            style="@style/button"
+            android:id="@+id/btn_fan3"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_fan3" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/button_row"
+        android:id="@+id/lyo_set_temp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <Button
+            style="@style/button_adj"
+            android:id="@+id/btn_temp_minus"
+            android:layout_alignParentStart="true"
+            android:text="@string/btn_minus" />
+
+        <TextView
+            style="@style/set"
+            android:id="@+id/txv_temp_set"
+            android:text="@string/temp_str"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toStartOf="@id/btn_temp_plus"
+            android:layout_toEndOf="@+id/btn_temp_minus" />
+        <Button
+            style="@style/button_adj"
+            android:id="@+id/btn_temp_plus"
+            android:layout_alignParentEnd="true"
+            android:text="@string/btn_plus" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/button_row"
+        android:id="@+id/lyo_set_time"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <Button
+            style="@style/button_adj"
+            android:id="@+id/btn_time_minus"
+            android:layout_alignParentStart="true"
+            android:text="@string/btn_minus" />
+
+        <TextView
+            style="@style/set"
+            android:id="@+id/txv_time_set"
+            android:text="@string/time_str"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toStartOf="@id/btn_time_plus"
+            android:layout_toEndOf="@+id/btn_time_minus" />
+        <Button
+            style="@style/button_adj"
+            android:id="@+id/btn_time_plus"
+            android:layout_alignParentEnd="true"
+            android:text="@string/btn_plus" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            style="@style/button_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                style="@style/button"
+                android:id="@+id/btn_gen_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_gen_on" />
+            <Button
+                style="@style/button"
+                android:id="@+id/btn_gen_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_gen_off" />
+            <TextView
+                style="@style/color"
+                android:id="@+id/txv_gen_color"
+                android:layout_height="match_parent"
+                android:background="#DF0101" />
+            <TextView
+                android:id="@+id/txv_gen"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textColor="#000"
+                android:text="@string/txv_gen"/>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txv_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txv_log" />
+
+            <TextView
+                android:id="@+id/txv_received"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txv_received" />
+
+            <TextView
+                android:id="@+id/txv_gen_received"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txv_gen_received" />
+
+            <TextView
+                android:id="@+id/txv_sent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txv_sent" />
+
+            <TextView
+                android:id="@+id/txv_gen_sent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txv_gen_sent" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

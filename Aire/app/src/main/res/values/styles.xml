@@ -1,0 +1,41 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="button_row" parent="TextAppearance.AppCompat">
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+
+    <style name="button" parent="TextAppearance.AppCompat">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="color" parent="TextAppearance.AppCompat">
+        <item name="android:layout_width">10dp</item>
+    </style>
+
+    <style name="temp" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">25sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="button_adj" parent="TextAppearance.AppCompat">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+
+    <style name="set" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">30sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+</resources>

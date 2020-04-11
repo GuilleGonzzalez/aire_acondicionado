@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Aire</string>
+
+    <!-- Layout  -->
+
+    <string name="btn_on">On</string>
+    <string name="btn_off">Off</string>
+
+    <string name="btn_fan_auto">Auto</string>
+    <string name="btn_fan1">1</string>
+    <string name="btn_fan2">2</string>
+    <string name="btn_fan3">3</string>
+
+    <string name="btn_minus">-</string>
+    <string name="btn_plus">+</string>
+
+    <string name="btn_gen_on">On</string>
+    <string name="btn_gen_off">Off</string>
+    <string name="txv_gen">Máquina general</string>
+
+    <string name="txv_log">Log</string>
+    <string name="txv_received">Recibido</string>
+    <string name="txv_gen_received">Recibido general</string>
+    <string name="txv_sent">Enviado</string>
+    <string name="txv_gen_sent">Enviado general</string>
+
+
+    <!-- Java  -->
+
+    <string name="info">"Info: %1$s, Data: %2$s"</string>
+    <string name="gen_info">"Recibido general: %1$s"</string>
+
+    <string name="temp">"%1$d ºC"</string>
+    <string name="temp_nan">"- ºC"</string>
+    <string name="temp_set">"%1$d ºC"</string>
+    <string name="time_set">"%1$dh %2$02dm %3$02ds"</string>
+    <string name="temp_str">"Temperatura"</string>
+    <string name="time_str">"Tiempo"</string>
+
+    <string name="offline">"Sin conexión"</string>
+    <string name="is_off">"Dispositivo apagado"</string>
+
+    <string name="temp_err">"No disponible. Error en el sensor"</string>
+
+    <string name="thermometer">"Termómetro"</string>
+
+</resources>
