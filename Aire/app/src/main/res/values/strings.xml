@@ -21,14 +21,17 @@
     <string name="txv_log">Log</string>
     <string name="txv_received">Recibido</string>
     <string name="txv_gen_received">Recibido general</string>
+    <string name="txv_vent_received">Recibido rejilla</string>
     <string name="txv_sent">Enviado</string>
     <string name="txv_gen_sent">Enviado general</string>
+    <string name="txv_vent_sent">Enviado rejilla</string>
 
 
     <!-- Java  -->
 
     <string name="info">"Info: %1$s, Data: %2$s"</string>
     <string name="gen_info">"Recibido general: %1$s"</string>
+    <string name="vent_info">"Recibido rejilla: %1$s"</string>
 
     <string name="temp">"%1$d ºC"</string>
     <string name="temp_nan">"- ºC"</string>
@@ -36,6 +39,7 @@
     <string name="time_set">"%1$dh %2$02dm %3$02ds"</string>
     <string name="temp_str">"Temperatura"</string>
     <string name="time_str">"Tiempo"</string>
+    <string name="vent_str">"%1$d"</string>
 
     <string name="offline">"Sin conexión"</string>
     <string name="is_off">"Dispositivo apagado"</string>

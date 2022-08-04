@@ -1,14 +1,17 @@
 package ggonzalezm.aire;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,23 +20,26 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final String ADDRESS = "192.168.0.48";
     private static final String ADDRESS_GENERAL = "192.168.0.34";
+    private static final String ADDRESS_VENT = "192.168.0.51";
     private static final int MIN_TEMP = 17;
     private static final int MAX_TEMP = 30;
     private static final int INIT_TEMP = 25;
     private static final int T_TEMP_UPDATE = 5000;
     private static final int T_TIME_UPDATE = 1000;
     private static final int T_GEN_UPDATE = 30000;
-    private static final int[] TIMES = {0, 1, 5,10,15,20,30,45,60,90,120,180,240,300};
+    private static final int[] TIMES = {0, 1, 5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240, 300};
 
     RelativeLayout lyo_fan, lyo_set_temp, lyo_set_time;
     Button btn_on, btn_off, btn_fan_auto, btn_fan1, btn_fan2, btn_fan3, btn_temp_minus, btn_temp_plus, btn_time_minus, btn_time_plus, btn_gen_on, btn_gen_off;
-    TextView txv_color, txv_temp, txv_temp_set, txv_time_set, txv_gen_color, txv_log, txv_sent, txv_gen_sent, txv_received, txv_gen_received;
+    TextView txv_color, txv_temp, txv_temp_set, txv_time_set, txv_vent, txv_gen_color, txv_log, txv_sent, txv_gen_sent,  txv_vent_sent, txv_received, txv_gen_received, txv_vent_received;
+    SeekBar sb_vent;
 
     Handler handler_update = new Handler();
     Handler handler_gen_update = new Handler();
 
     public static String address = ADDRESS;
     public static String gen_address = ADDRESS_GENERAL;
+    public static String vent_address = ADDRESS_VENT;
     boolean is_on = false;
     boolean is_gen_on = false;
     boolean is_timer = false;
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     int time_set = 0;
     int i_times = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         txv_time_set = findViewById(R.id.txv_time_set);
         btn_time_plus = findViewById(R.id.btn_time_plus);
 
+        sb_vent = findViewById(R.id.sb_vent);
+        txv_vent = findViewById(R.id.txv_vent);
+
         btn_gen_on = findViewById(R.id.btn_gen_on);
         btn_gen_off = findViewById(R.id.btn_gen_off);
         txv_gen_color = findViewById(R.id.txv_gen_color);
@@ -76,8 +86,10 @@ public class MainActivity extends AppCompatActivity {
         txv_log = findViewById(R.id.txv_log);
         txv_sent = findViewById(R.id.txv_sent);
         txv_gen_sent = findViewById(R.id.txv_gen_sent);
+        txv_vent_sent = findViewById(R.id.txv_vent_sent);
         txv_received = findViewById(R.id.txv_received);
         txv_gen_received = findViewById(R.id.txv_gen_received);
+        txv_vent_received = findViewById(R.id.txv_vent_received);
 
         btn_on.setOnClickListener(ClickListener);
         btn_off.setOnClickListener(ClickListener);
@@ -92,10 +104,15 @@ public class MainActivity extends AppCompatActivity {
         btn_gen_on.setOnClickListener(ClickListener);
         btn_gen_off.setOnClickListener(ClickListener);
 
+        sb_vent.setMin(30);
+        sb_vent.setMax(145);
+        sb_vent.setOnSeekBarChangeListener(SeekBarListener);
+
         handler_update.postDelayed(update, 0);
         handler_gen_update.postDelayed(gen_update, 0);
 
         txv_temp_set.setText(getString(R.string.temp_set, temp_set));
+        txv_vent.setText(getString(R.string.vent_str, 0));
 
         lyo_fan.setVisibility(View.GONE);
         lyo_set_temp.setVisibility(View.GONE);
@@ -107,6 +124,23 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         statusRec = false;
     }
+
+    SeekBar.OnSeekBarChangeListener SeekBarListener = new SeekBar.OnSeekBarChangeListener() {
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
+            txv_vent.setText(getString(R.string.vent_str, progress));
+        }
+
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            // unused
+        }
+
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            String progress = txv_vent.getText().toString();
+            MyClientTask my_task = new MyClientTask(vent_address);
+            my_task.execute("a" + progress);
+            Log.i(TAG, progress);
+        }
+    };
 
     View.OnClickListener ClickListener = new View.OnClickListener() {
         @Override
@@ -140,12 +174,12 @@ public class MainActivity extends AppCompatActivity {
                     my_task.execute("f3");
                 }
                 if (v == btn_temp_minus) {
-                    temp_set = (temp_set <= MIN_TEMP) ? MIN_TEMP : temp_set-1;
+                    temp_set = (temp_set <= MIN_TEMP) ? MIN_TEMP : temp_set - 1;
                     txv_temp_set.setText(getString(R.string.temp_set, temp_set));
                     my_task.execute("t" + temp_set);
                 }
                 if (v == btn_temp_plus) {
-                    temp_set = (temp_set >= MAX_TEMP) ? MAX_TEMP : temp_set+1;
+                    temp_set = (temp_set >= MAX_TEMP) ? MAX_TEMP : temp_set + 1;
                     txv_temp_set.setText(getString(R.string.temp_set, temp_set));
                     my_task.execute("t" + temp_set);
                 }
@@ -191,6 +225,8 @@ public class MainActivity extends AppCompatActivity {
                         txv_sent.setText(url);
                     } else if (server.equals(gen_address)) {
                         txv_gen_sent.setText(url);
+                    } else if (server.equals(vent_address)) {
+                        txv_vent_sent.setText(url);
                     }
                 }
             });
@@ -205,10 +241,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 String[] result_split = result.split(",");
                 int device =  Integer.parseInt(result_split[0]);
-                if (device == 0) {
+                if (device == 0) { // General
                     String info = result_split[1];
                     txv_gen_received.setText(getString(R.string.gen_info, info));
                     checkGenInfo(info);
+                } else if (device == 10) { // Rejilla
+                    String info = result_split[1];
+                    txv_vent_received.setText(getString(R.string.vent_info, info));
                 } else {
                     String info = result_split[1];
                     String data = result_split[2];
@@ -239,6 +278,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    String getTemp(String temp) {
+        try {
+            Float.parseFloat(temp);
+            return temp + " ºC";
+        } catch (NumberFormatException e) {
+            return getString(R.string.temp_nan);
+        }
+    }
+
     void checkInfo(String info, String data) {
         if (info.equals("update")) {
             String[] data_split = data.split(";");
@@ -254,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
                 is_timer = false;
             }
         }
-        int temp = Integer.parseInt(data);
+
         switch (info) {
             case "off":
                 is_on = false;
@@ -273,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
                 txv_color.setBackgroundColor(getColor(R.color.on));
                 break;
             case "fauto":
-                if (temp == -1) {
+                if (getTemp(data).equals(R.string.temp_nan)) {
                     Toast.makeText(getApplicationContext(), getString(R.string.temp_err), Toast.LENGTH_SHORT).show();
                 } else {
                     lyo_set_temp.setVisibility(View.VISIBLE);
@@ -293,11 +341,7 @@ public class MainActivity extends AppCompatActivity {
                 setFocusButton(btn_fan3);
                 break;
         }
-        if (temp == -1) {
-            txv_temp.setText(getString(R.string.temp_nan));
-        } else {
-            txv_temp.setText(getString(R.string.temp, Integer.parseInt(data)));
-        }
+        txv_temp.setText(getTemp(data));
     }
 
     void setFocusButton(Button b) {

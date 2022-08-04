@@ -34,7 +34,7 @@
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:contentDescription="@string/thermometer"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="30dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/ic_thermometer" />
         <TextView
@@ -133,6 +133,17 @@
             android:text="@string/btn_plus" />
     </RelativeLayout>
 
+    <SeekBar
+        android:id="@+id/sb_vent"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+    <TextView
+        style="@style/set"
+        android:id="@+id/txv_vent"
+        android:text="@string/vent_str"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:gravity="bottom"
         android:layout_width="match_parent"
@@ -198,6 +209,12 @@
                 android:text="@string/txv_gen_received" />
 
             <TextView
+                android:id="@+id/txv_vent_received"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txv_vent_received" />
+
+            <TextView
                 android:id="@+id/txv_sent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -208,6 +225,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/txv_gen_sent" />
+
+            <TextView
+                android:id="@+id/txv_vent_sent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txv_vent_sent" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
