@@ -1,8 +1,11 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
+#include <ESP8266mDNS.h>
 #include <DHT.h>
 #include "Timer.h"
+//#include <arduino-timer.h>
+#include <ArduinoJson.h>
 
 #define PIN_DHT         D8
 #define PIN_LED_ON      D6
@@ -17,13 +20,13 @@
 #define THRESHOLD_LOW   1
 #define DEFAULT_TEMP    25
 
-#define DHT_TYPE DHT11
+#define DHT_TYPE DHT12
 
 DHT dht(PIN_DHT, DHT_TYPE);
 Timer t;
 
 const String device = "1";
-const char* ssid = "Gonmar 3";
+const char* ssid = "Gonmar-Livebox";
 const char* password = "618995151609549464";
 
 String message;
@@ -38,6 +41,51 @@ int temp_event;
 int time_event;
 
 ESP8266WebServer server(80);
+
+void setCrossOrigin(){
+    server.sendHeader(F("Access-Control-Allow-Origin"), F("*"));
+    server.sendHeader(F("Access-Control-Max-Age"), F("600"));
+    server.sendHeader(F("Access-Control-Allow-Methods"), F("PUT,POST,GET,OPTIONS"));
+    server.sendHeader(F("Access-Control-Allow-Headers"), F("*"));
+};
+
+void sendCrossOriginHeader(){
+    Serial.println(F("sendCORSHeader"));
+    setCrossOrigin();
+    server.send(204);
+}
+
+void getSettings() {
+    setCrossOrigin();
+    // Allocate a temporary JsonDocument
+    // Don't forget to change the capacity to match your requirements.
+    // Use arduinojson.org/v6/assistant to compute the capacity.
+    // StaticJsonDocument<512> doc;
+    // You can use DynamicJsonDocument as well
+    DynamicJsonDocument doc(512);
+    doc["ip"] = WiFi.localIP().toString();
+    doc["gw"] = WiFi.gatewayIP().toString();
+    doc["nm"] = WiFi.subnetMask().toString();
+ 
+    if (server.arg("signalStrength") == "true"){
+      doc["signalStrengh"] = WiFi.RSSI();
+    }
+    if (server.arg("chipInfo") == "true"){
+      doc["chipId"] = ESP.getChipId();
+      doc["flashChipId"] = ESP.getFlashChipId();
+      doc["flashChipSize"] = ESP.getFlashChipSize();
+      doc["flashChipRealSize"] = ESP.getFlashChipRealSize();
+    }
+    if (server.arg("freeHeap") == "true"){
+      doc["freeHeap"] = ESP.getFreeHeap();
+    }
+ 
+    Serial.print(F("Stream..."));
+    String buf;
+    serializeJson(doc, buf);
+    server.send(200, F("application/json"), buf);
+    Serial.print(F("done."));
+}
 
 void turn_on() {
   is_auto = false;
@@ -160,12 +208,16 @@ void setup(void) {
     delay(500);
     Serial.print(".");
   }
-  
+
   Serial.println("");
   Serial.print("Connected to ");
   Serial.println(ssid);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+
+  if (MDNS.begin("aire")) {
+    Serial.println("MDNS responder started");
+  }
 
   pinMode(PIN_FAN1, OUTPUT);
   pinMode(PIN_FAN2, OUTPUT);
@@ -178,7 +230,7 @@ void setup(void) {
   digitalWrite(PIN_FAN2, HIGH);
   digitalWrite(PIN_FAN3, HIGH);
   digitalWrite(PIN_LED_OFFLINE, HIGH);
- 
+
   server.on("/on", turn_on);
   server.on("/off", turn_off);
   server.on("/f1", fan1);
@@ -186,13 +238,15 @@ void setup(void) {
   server.on("/f3", fan3);
   server.on("/fauto", fan_auto);
   server.on("/update", upd);
+  server.on(F("/settings"), HTTP_OPTIONS, sendCrossOriginHeader);
+  server.on(F("/settings"), HTTP_GET, getSettings);
   server.onNotFound(other);
-  
+
   server.begin();
   Serial.println("HTTP server started");
 }
 
-void loop(void){  
+void loop(void) {
   server.handleClient();
   while (WiFi.status() != WL_CONNECTED) {
     digitalWrite(PIN_LED_OFFLINE, LOW);
